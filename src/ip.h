@@ -120,12 +120,6 @@ struct icmp
     u16 id, seq;
   };
 
-#ifndef in_addr
-struct in_addr
-  {
-    unsigned long int s_addr;
-  };
-#endif
 
 char *inet_ntoa (struct in_addr);
 unsigned long int inet_addr (const char *cp);
