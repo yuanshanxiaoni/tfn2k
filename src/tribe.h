@@ -50,6 +50,7 @@ int strcasecmp (const char *s1, const char *s2);
 #define BS 4096
 
 void random_init (void);
+//inline long getrandom (int, int);
 inline long getrandom (int, int);
 void trimbuf (char *);
 #ifdef ATTACKLOG
@@ -63,7 +64,8 @@ void udp (unsigned long);
 void targa3 (unsigned long);
 void icmp (unsigned long, unsigned long);
 
-inline unsigned long k00lip (void);
+//inline unsigned long k00lip (void);
+unsigned long k00lip (void);
 void must_kill_all (void);
 void commence_udp (char *);
 void commence_syn (char *, int);

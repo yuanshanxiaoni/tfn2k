@@ -4,7 +4,7 @@
 
 # Linux / *BSD* / Others
 CC = gcc
-CFLAGS = -Wall -O3
+CFLAGS = -Wall -O0
 CLIBS =
 
 # Solaris (IRIX / AIX / HPUX ?)
@@ -26,7 +26,7 @@ clean:
 	@echo removing junk...
 	@rm -f tfn td mkpass disc pass.c *.exe *.o *~
 
-tfn:	agreed ${CLIENT_OBJ}
+tfn: agreed ${CLIENT_OBJ}
 	${CC} ${CFLAGS} ${CLIBS} ${CLIENT_OBJ} -o tfn
 	strip tfn
 

@@ -28,7 +28,7 @@ random_init (void)
   close (rfd);
 }
 
-inline
+//inline
 long 
 getrandom (int min, int max)
 {
@@ -48,7 +48,8 @@ trimbuf (char *buf)
       buf[i] = '\0';
 }
 
-inline unsigned long
+//inline 
+unsigned long
 k00lip (void)
 {
   struct in_addr hax0r;

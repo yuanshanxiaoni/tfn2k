@@ -12,6 +12,7 @@
  */
 
 #include "tribe.h"
+#include "ip.h"
 
 extern int rcounter;
 extern char rseed[];
