@@ -213,7 +213,7 @@ TFN2k 模拟攻击示例
 
 ## 关闭攻击
 
-> # /root/tfn -f host_tfn -c 0
+>#/root/tfn -f host_tfn -c 0
 
 > Protocol      : random
 
@@ -230,7 +230,7 @@ TFN2k 模拟攻击示例
  
 ### 关闭攻击后，被攻击主机有可能会恢复通信，也有可能仍不能通信（必须重起），即被“攻死了”
 
-> # ping 10.4.192.25
+>#ping 10.4.192.25
 
 > PING 10.4.192.25 (10.4.192.25) 56(84) bytes of data.
 
@@ -251,7 +251,7 @@ TFN2k 模拟攻击示例
 
 > 10 packets transmitted, 0 received, +6 errors, 100% packet loss, time 8998ms
  
-> # ping 10.4.192.25
+>#ping 10.4.192.25
 
 > PING 10.4.192.25 (10.4.192.25) 56(84) bytes of data.
 
