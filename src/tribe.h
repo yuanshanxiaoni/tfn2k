@@ -50,8 +50,8 @@ int strcasecmp (const char *s1, const char *s2);
 #define BS 4096
 
 void random_init (void);
-//inline long getrandom (int, int);
-inline long getrandom (int, int);
+// inline long getrandom (int, int);
+long getrandom (int, int);
 void trimbuf (char *);
 #ifdef ATTACKLOG
 void dbug (char *);

