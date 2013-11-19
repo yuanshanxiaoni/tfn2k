@@ -8,17 +8,24 @@ TFN2k 模拟攻击示例
 
 #1. 编译
 
-`git clone https://github.com/poornigga/tfn2k`
-`cd tfn2k`
-`make`
+>git clone https://github.com/poornigga/tfn2k
+
+>cd tfn2k
+
+>make
+
 
 #2. 安装
 
 ##测试环境：
 >主控端tfn：10.4.3.145
+
 >被控端td:
+
 >1. 10.4.192.26
+
 >2. 10.4.3.117
+
 >3. 10.4.3.145  (10.4.3.145既做主控端又做被控端，即主控端自身也是肉鸡)
 
 ##测试手段：
