@@ -75,11 +75,10 @@ void commence_smurf (char *);
 void commence_targa3 (char *);
 void shellsex (int);
 
-struct tribe
-  {
+struct tribe {
     char start;
     char id;
     char end;
-  };
+};
 
 #endif

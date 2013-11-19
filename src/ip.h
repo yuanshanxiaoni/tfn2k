@@ -62,21 +62,18 @@ unsigned short int ntohs (unsigned short int netshort);
 #define UDP 17
 #define RAW 255
 
-struct sa
-  {
+struct sa {
     u16 fam, dp;
     u32 add;
     u8 zero[8];
-  };
+};
 
-struct su
-  {
+struct su {
     u16 fam;
     char path[108];
-  };
+};
 
-struct ip
-  {
+struct ip {
 #if __BYTE_ORDER == __LITTLE_ENDIAN
     u8 ihl:4, ver:4;
 #else
@@ -87,10 +84,9 @@ struct ip
     u8 ttl, pro;
     u16 sum;
     u32 src, dst;
-  };
+};
 
-struct tcp
-  {
+struct tcp {
     u16 src, dst;
     u32 seq, ack;
 #if __BYTE_ORDER == __LITTLE_ENDIAN
@@ -106,19 +102,17 @@ struct tcp
 #define ACK  0x10
 #define URG  0x20
     u16 win, sum, urp;
-  };
+};
 
-struct udp
-  {
+struct udp {
     u16 src, dst, len, sum;
-  };
+};
 
-struct icmp
-  {
+struct icmp {
     u8 type, code;
     u16 sum;
     u16 id, seq;
-  };
+};
 
 
 char *inet_ntoa (struct in_addr);
