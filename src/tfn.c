@@ -186,7 +186,7 @@ int main (int argc, char **argv) {
             break;
     }
 
-#ifdef REQUIRE_PASS
+#ifndef REQUIRE_PASS
     passchk ();
 #endif
 
@@ -195,9 +195,11 @@ int main (int argc, char **argv) {
 
     security_through_obscurity (1);
 
-    if (tfnlist == NULL)
+    if (tfnlist == NULL) {
+        printf ( "tnflist null ....\n" );
         tfn_sendto (tfnhost);
-    else
+    } else {
+        printf ( "tnflist not null ....\n" );
         while (fgets (nexthost, 512, tfnlist) != NULL) {
             switch (nexthost[0]) {
                 case '\n':
@@ -212,6 +214,7 @@ int main (int argc, char **argv) {
             if (tfnhost)
                 tfn_sendto (tfnhost);
         }
+    }
 
     printf ("\n");
     return 0;

@@ -159,8 +159,9 @@ void tfntransmit (unsigned long from, unsigned long to, int proto, char id, char
 
     // if not call connect; must use sendto, recvfrom
     // that why here, --- sednto
-    if (sendto (ssock, buf, tot_len, 0, (struct sockaddr *) &sin, sizeof (sin)) < 0)
+    if (sendto (ssock, buf, tot_len, 0, (struct sockaddr *) &sin, sizeof (sin)) < 0){
         perror ("sendto");
+    }
 
     close (ssock);
 }
