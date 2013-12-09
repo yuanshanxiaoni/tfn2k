@@ -1,0 +1,6 @@
+
+tags
+.DS_Store
+*.[oa]
+*.dSYM
+metadata/*
